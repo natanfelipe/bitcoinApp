@@ -1,20 +1,20 @@
 package com.br.natanfelipe.bitcoinapp.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
+import androidx.room.*
 
-@Entity(tableName = "bitcoinInfo")
-data class Bitcoin (
-    @ColumnInfo
+data class Bitcoin(
     val name: String,
-    @ColumnInfo
     val unit: String,
-    @ColumnInfo
     val period: String,
-    @ColumnInfo
     val description: String,
-    @ColumnInfo
     val values: List<Values>
 )
 
-data class Values (val x: Long, val y: Double)
+@Entity
+data class Values(
+    val x: Long,
+    val y: Double
+) {
+    @PrimaryKey(autoGenerate = true)
+    var valueId: Int = 0
+}

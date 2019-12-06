@@ -7,12 +7,8 @@ class Utils {
     fun isConnectedToInternet(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        var isConnected = false
-        if (connectivityManager != null) {
-            val activeNetwork = connectivityManager.activeNetworkInfo
-            isConnected = activeNetwork != null && activeNetwork.isConnected
-        }
+        val activeNetwork = connectivityManager.activeNetworkInfo
 
-        return  isConnected
+        return  activeNetwork != null && activeNetwork.isConnected
     }
 }

@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 open class ApiServiceModule {
 
     @Provides
-    fun provideRetrofit(): BlockChainApi = Retrofit.Builder()
+    fun provideRetrofit() = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

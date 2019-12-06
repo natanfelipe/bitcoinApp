@@ -30,25 +30,26 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <include
                 android:id="@+id/contentCard"
-                layout="@layout/content_activity"
+                layout="@layout/content_layout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                bind:bitcoin="@{bitcoin}" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/errorMessage"
+                style="@style/DefaultText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:bitcoin="@{bitcoin}" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/errorMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                tools:text="Error message"
-                style="@style/DefaultText"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                tools:text="Error message" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

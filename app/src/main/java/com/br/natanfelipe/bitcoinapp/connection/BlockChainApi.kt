@@ -10,6 +10,5 @@ interface BlockChainApi {
     @GET("charts/market-price")
     suspend fun getStats(
         @Query(value = "timespan", encoded = true) timespan: String,
-        @Query("format") format: String
-    ): Response<Bitcoin>
+        @Query("format") format: String): Response<Bitcoin>
 }

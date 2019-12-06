@@ -6,41 +6,26 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.RoomDatabase
-import com.br.natanfelipe.bitcoinapp.BitcoinViewModelFactory
 import com.br.natanfelipe.bitcoinapp.R
-import com.br.natanfelipe.bitcoinapp.dao.BitcoinDatabase
+import com.br.natanfelipe.bitcoinapp.ViewModelFactory
 import com.br.natanfelipe.bitcoinapp.databinding.ActivityMainBinding
-import com.br.natanfelipe.bitcoinapp.di.component.DaggerAppComponent
-import com.br.natanfelipe.bitcoinapp.repository.BlockChainRepository
+import com.br.natanfelipe.bitcoinapp.di.component.DaggerApiServiceComponent
 import com.br.natanfelipe.bitcoinapp.utils.Utils
 import com.br.natanfelipe.bitcoinapp.viewmodel.BlockChainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), CoroutineScope {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var blockChainViewModel: BlockChainViewModel
 
     private lateinit var binding: ActivityMainBinding
 
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
-
-
     @Inject
     lateinit var utils: Utils
 
-    /*@Inject
-    lateinit var roomDatabase: RoomDatabase*/
-
-    private lateinit var roomDatabase: BitcoinDatabase
-
     init {
-        DaggerAppComponent
+        DaggerApiServiceComponent
             .create()
             .inject(this)
     }
@@ -48,13 +33,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        roomDatabase = BitcoinDatabase.getDatabase(applicationContext, this)
-
-        blockChainViewModel = ViewModelProvider(this, BitcoinViewModelFactory(roomDatabase))
+        blockChainViewModel = ViewModelProvider(this, ViewModelFactory(this))
             .get(BlockChainViewModel::class.java)
-
-        job.cancel()
 
         observeViewModel()
 
@@ -73,6 +53,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         blockChainViewModel.loadData(isConnected).observe(this, Observer { bitcoin ->
             bitcoin.let {
+                cardsVisibility(true)
                 binding.bitcoin = it
             }
         })
@@ -80,21 +61,33 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         blockChainViewModel.isLoading.observe(this, Observer { isLoading ->
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             if (isLoading) {
-                //binding.contentCard.statsCard.visibility = View.GONE
-                binding.errorMessage.visibility = View.GONE
+                cardsVisibility(false)
             }
         })
 
-        /*blockChainViewModel.message.observe(this, Observer { message ->
+        blockChainViewModel.message.observe(this, Observer { message ->
             binding.errorMessage.text = getString(message)
-            if(binding.errorMessage.text.isEmpty()){
-                binding.contentCard.statsCard.visibility = View.VISIBLE
-                binding.errorMessage.visibility = View.GONE
-            }  else {
-                binding.contentCard.statsCard.visibility = View.GONE
+        })
+
+        blockChainViewModel.isToShowMessage.observe(this, Observer { isToShow ->
+            if(isToShow){
+                cardsVisibility(false)
                 binding.errorMessage.visibility = View.VISIBLE
+            } else {
+                cardsVisibility(true)
+                binding.errorMessage.visibility = View.GONE
             }
-        })*/
+        })
+    }
+
+    private fun cardsVisibility(isVisible: Boolean){
+        if(isVisible){
+            binding.contentCard.todayPriceCard.visibility = View.VISIBLE
+            binding.contentCard.statsCard.visibility = View.VISIBLE
+        } else {
+            binding.contentCard.todayPriceCard.visibility = View.GONE
+            binding.contentCard.statsCard.visibility = View.GONE
+        }
     }
 }
 

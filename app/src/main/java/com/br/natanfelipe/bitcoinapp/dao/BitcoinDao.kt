@@ -4,15 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.br.natanfelipe.bitcoinapp.model.Bitcoin
+import com.br.natanfelipe.bitcoinapp.model.Values
 
 @Dao
 interface BitcoinDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addBitcoinData(bitcoin: Bitcoin): Bitcoin
+    suspend fun addValuesData(values: List<Values>)
 
-    @Query("SELECT * FROM bitcoinInfo")
-    suspend fun getBitcoin(): List<Bitcoin>
+    @Query("SELECT * FROM `Values`")
+    suspend fun getValues(): List<Values>
 
 }
