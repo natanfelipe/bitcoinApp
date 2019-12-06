@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BitcoinApp</string>
+    <string name="date_format">%1$td/%1$tm/%1$tY</string>
+    <string name="msg_offline">Your device is offline. Please retry.</string>
+    <string name="title_quotation">Current bitcoin quotation</string>
+    <string name="generic_error">Sorry! There is some issue on loading data. Please try to refresh.</string>
 </resources>
